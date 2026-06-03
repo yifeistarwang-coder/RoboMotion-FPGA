@@ -14,7 +14,7 @@
 
 ## 📖 项目概述
 
-> **RoboMotion-FPGA** 是一个面向 Xilinx FPGA 平台的完整 Verilog HDL 机器人控制系统。工程将全向四轮移动底盘、六自由度机械臂、传感器与显示外设、以及多路 UART 指令接口集成到统一的顶层硬件设计中——专为自主移动抓取应用而构建。
+> **RoboMotion-FPGA** 是一个面向 Xilinx FPGA 平台的完整 Verilog HDL 机器人控制系统。工程将全向四轮移动底盘、六路舵机机械臂子系统、传感器与显示外设、以及多路 UART 指令接口集成到统一的顶层硬件设计中——专为自主移动抓取应用而构建。
 
 ---
 
@@ -25,7 +25,7 @@
 <td width="33%" valign="top">
 
 <h3 align="center">🚗<br/>移动<br/>底盘</h3>
-<p>4 路直流电机驱动，集成编码器反馈、PWM 输出，支持速度/位置双 PID 闭环控制。</p>
+<p>4 路直流电机驱动，集成编码器反馈、PWM 输出，支持速度 PID 闭环控制。</p>
 
 </td>
 <td width="33%" valign="top">
@@ -37,7 +37,7 @@
 <td width="33%" valign="top">
 
 <h3 align="center">🦾<br/>机械臂<br/>控制</h3>
-<p>6 路舵机 PWM 输出，基于 <strong>CORDIC 算法的逆运动学解算</strong>，实现精准末端定位。</p>
+<p>6 路舵机 PWM 输出，基于 <strong>CORDIC 算法的逆运动学解算</strong>，用于机械臂定位与夹爪控制。</p>
 
 </td>
 </tr>
@@ -45,13 +45,13 @@
 <td width="33%" valign="top">
 
 <h3 align="center">📡<br/>多协议<br/>UART</h3>
-<p>蓝牙控制、机器视觉输入、状态数据回传、FSM 指令解析——全部通过可配置的 UART 通道实现。</p>
+<p>蓝牙控制、机器视觉输入、配置成功回传、FSM 指令解析——全部通过可配置的 UART 通道实现。</p>
 
 </td>
 <td width="33%" valign="top">
 
 <h3 align="center">🌡️<br/>传感器<br/>套件</h3>
-<p>DHT11 温湿度采集、超声波测距（×3）、按键输入、74HC595 数码管显示——环境感知与信息输出一体化。</p>
+<p>DHT11 温湿度采集、基于 UART 的测距输入（×3）、按键输入、74HC595 数码管显示——环境感知与信息输出一体化。</p>
 
 </td>
 <td width="33%" valign="top">
@@ -89,7 +89,7 @@ flowchart LR
     motor_driver["dc_motor_driver_top x4<br/>PID + 编码器 + PWM"]
   end
 
-  subgraph ARM["arm_top - 六自由度机械臂"]
+  subgraph ARM["arm_top - 六路舵机机械臂控制"]
     arm_uart["uart_arm_mv / uart_arm_ble<br/>目标点与动作解析"]
     arm_motion["motion<br/>CORDIC 逆运动学"]
     servo_pwm["steer_pwm x6<br/>舵机脉宽生成"]
@@ -110,7 +110,7 @@ flowchart LR
   wheel_ctrl --> motor_driver
   motor_driver --> motors["M1-M4<br/>H 桥 + PWM"]
   enc -. 反馈 .-> motor_driver
-  chassis_uart --> uart_tx["uart_tx<br/>状态回传"]
+  chassis_uart --> uart_tx["uart_tx<br/>配置 ACK"]
 
   robot_top --> arm_uart
   arm_uart --> arm_motion
@@ -148,20 +148,21 @@ flowchart LR
 ## 📡 UART 协议
 
 > 💡 **提示：** 配置指令成功后，UART 将返回 `Set Successful!`。
+>
+> 当前工程同时使用 ASCII 关键字命令和固定二进制帧两种解析方式。
 
 | 类别 | 指令 | 功能 | 示例 / 范围 |
 |:---|:---|:---|:---|
-| 🔧 系统 | `b<baud>` | 设置 UART 波特率 | `b0` – `b7` |
-| 🚗 运动 | `w<num>` | 选择轮系运动模型 | `w0` 麦克纳姆，`w1` 全向四轮，`w2` 全向三轮 |
-| ⚙️ 参数 | `g<value>` | 设置减速比 | `g30` |
-| ⚙️ 参数 | `p<value>` | 设置编码器 PPR | `p13` |
-| ⚙️ 参数 | `a<mm>` | 设置底盘尺寸 A | `a200` |
-| ⚙️ 参数 | `l<mm>` | 设置底盘尺寸 B | `l150` |
-| 🎮 控制 | `x<spd>` | X 轴速度 | 有符号整数 |
-| 🎮 控制 | `y<spd>` | Y 轴速度 | 有符号整数 |
-| 🎮 控制 | `z<spd>` | 旋转速度 | 有符号整数 |
-| 💃 动作 | 舞蹈指令 | 预设运动序列 | 由 [`dance_cmd.v`](verilog/rtl/motion/dance_cmd.v) 解析 |
-| 🦾 机械臂 | 蓝牙 / MV 指令 | 抓取、移动、放置 | 由机械臂 UART 模块解析 |
+| 🔧 系统 | `baud+<n>` | 设置 UART 波特率预设 | `baud+0` – `baud+4` |
+| 🚗 运动 | `wheel+<n>` | 选择轮系运动模型 | `wheel+0` 麦克纳姆，`wheel+1` 全向四轮，`wheel+2` 全向三轮 |
+| ⚙️ 参数 | `gr+<value>` | 设置减速比 | `gr+30` |
+| ⚙️ 参数 | `Ppr+<value>` | 设置编码器 PPR | `Ppr+13` |
+| ⚙️ 参数 | `alen+<mm>` | 设置底盘尺寸 A | `alen+200` |
+| ⚙️ 参数 | `blen+<mm>` | 设置底盘尺寸 B | `blen+150` |
+| 🎮 控制 | `55 A5 sx x sy y sz z F0` | 底盘速度控制帧，`sx/sy/sz` 为符号位，`x/y/z` 为幅值 | `sx/sy/sz`：`00` 正、`01` 负 |
+| 💃 动作 | `55 C5 mode F0` | 预设舞蹈控制帧 | `mode=01` 启动，`mode=00` 清零 / 复位 |
+| 🦾 机械臂 BLE | `DD EE ... FF` | 机械臂动作帧，控制观察 / 运动 / 收拢 / 放置 / 夹取 | 由 [`uart_arm_ble.v`](verilog/rtl/comm/uart_arm_ble.v) 解析 |
+| 🦾 机械臂 MV | `AA BB ... CC` | 视觉目标帧，携带颜色、带符号 X/Y 与 theta | 由 [`uart_arm_mv.v`](verilog/rtl/comm/uart_arm_mv.v) 解析 |
 
 ---
 
@@ -178,9 +179,9 @@ RoboMotion-FPGA/
 │   │   ├── math/                     📐 CORDIC、乘法器、除法器
 │   │   ├── peripheral/               🌡️ 传感器、显示、定时器、按键滤波
 │   │   └── protocol/                 📋 FSM 协议解析（fsm_gr、fsm_ppr ……）
-│   ├── filelists/                    📋 文件列表（filelist.f、fpgafiles.vf）
-│   ├── tb/                           🧪 测试平台
-│   └── sim/                          📊 仿真
+│   ├── filelists/                    📋 历史文件列表（当前为 Windows 绝对路径）
+│   ├── tb/                           🧪 测试平台目录（当前为空）
+│   └── sim/                          📊 仿真目录（当前为空）
 ├── constrain/                        📏 管脚约束
 │   ├── robot_top_constrain.xdc
 │   └── disp_top_constrain.xdc
@@ -243,9 +244,10 @@ robot_top
 | **1** | 在 **Xilinx Vivado** 中创建新工程 |
 | **2** | 添加 [`verilog/rtl/`](verilog/rtl/) 目录下的全部 Verilog 源文件 |
 | **3** | 添加 [`constrain/`](constrain/) 目录下的 XDC 约束文件 |
-| **4** | 将 [`robot_top.v`](verilog/rtl/top/robot_top.v) 设置为 **系统顶层模块** |
-| **5** | 依次运行 **综合 → 实现 → 生成 Bitstream** |
-| **6** | 将 bitstream 下载到 FPGA 开发板并上电运行 |
+| **4** | 如果当前工具流无法直接使用 [`verilog/filelists/`](verilog/filelists/) 中的 Windows 绝对路径文件列表，请先重新生成或替换 |
+| **5** | 将 [`robot_top.v`](verilog/rtl/top/robot_top.v) 设置为 **系统顶层模块** |
+| **6** | 依次运行 **综合 → 实现 → 生成 Bitstream** |
+| **7** | 将 bitstream 下载到 FPGA 开发板并上电运行 |
 
 ---
 

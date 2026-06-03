@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-> **RoboMotion-FPGA** is a complete Verilog HDL control system for a mobile manipulation robot targeting Xilinx FPGA platforms. It integrates an omnidirectional four-wheel chassis, a 6-DOF robotic arm, sensor and display peripherals, and multiple UART command interfaces into a single, unified top-level hardware design — purpose-built for autonomous mobile grasping applications.
+> **RoboMotion-FPGA** is a complete Verilog HDL control system for a mobile manipulation robot targeting Xilinx FPGA platforms. It integrates an omnidirectional four-wheel chassis, a six-servo robotic arm subsystem, sensor and display peripherals, and multiple UART command interfaces into a single, unified top-level hardware design — purpose-built for autonomous mobile grasping applications.
 
 ---
 
@@ -25,7 +25,7 @@
 <td width="33%" valign="top">
 
 <h3 align="center">🚗<br/>Mobile<br/>Chassis</h3>
-<p>4-channel DC motor drive with encoder feedback, PWM output, and dual speed/position PID closed-loop control.</p>
+<p>4-channel DC motor drive with encoder feedback, PWM output, and speed PID closed-loop control.</p>
 
 </td>
 <td width="33%" valign="top">
@@ -37,7 +37,7 @@
 <td width="33%" valign="top">
 
 <h3 align="center">🦾<br/>Robotic<br/>Arm</h3>
-<p>6-channel servo PWM with <strong>CORDIC-based inverse kinematics</strong> for precise end-effector positioning.</p>
+<p>6-channel servo PWM with <strong>CORDIC-based inverse kinematics</strong> for arm positioning and gripper control.</p>
 
 </td>
 </tr>
@@ -45,13 +45,13 @@
 <td width="33%" valign="top">
 
 <h3 align="center">📡<br/>Multi-Protocol<br/>UART</h3>
-<p>Bluetooth control, machine-vision input, telemetry TX, and FSM-based command parsing — all over configurable UART channels.</p>
+<p>Bluetooth control, machine-vision input, configuration ACK TX, and FSM-based command parsing — all over configurable UART channels.</p>
 
 </td>
 <td width="33%" valign="top">
 
 <h3 align="center">🌡️<br/>Sensor<br/>Suite</h3>
-<p>DHT11 temperature &amp; humidity, ultrasonic distance ranging (×3), push-button inputs, and 74HC595-driven 7-segment display.</p>
+<p>DHT11 temperature &amp; humidity, UART-based distance inputs (×3), push-button inputs, and 74HC595-driven 7-segment display.</p>
 
 </td>
 <td width="33%" valign="top">
@@ -89,7 +89,7 @@ flowchart LR
     motor_driver["dc_motor_driver_top x4<br/>PID + encoder + PWM"]
   end
 
-  subgraph ARM["arm_top - 6-DOF arm control"]
+  subgraph ARM["arm_top - 6-channel servo arm control"]
     arm_uart["uart_arm_mv / uart_arm_ble<br/>target + action decode"]
     arm_motion["motion<br/>CORDIC inverse kinematics"]
     servo_pwm["steer_pwm x6<br/>servo pulse generation"]
@@ -110,7 +110,7 @@ flowchart LR
   wheel_ctrl --> motor_driver
   motor_driver --> motors["M1-M4<br/>H-bridge + PWM"]
   enc -. feedback .-> motor_driver
-  chassis_uart --> uart_tx["uart_tx<br/>status response"]
+  chassis_uart --> uart_tx["uart_tx<br/>config ACK"]
 
   robot_top --> arm_uart
   arm_uart --> arm_motion
@@ -148,20 +148,21 @@ flowchart LR
 ## 📡 UART Protocol
 
 > 💡 **Tip:** Successful configuration commands return `Set Successful!` over UART.
+>
+> Command parsing is a mix of ASCII keyword commands and fixed binary frames.
 
 | Category | Command | Description | Example / Range |
 |:---|:---|:---|:---|
-| 🔧 System | `b<baud>` | Set UART baud rate | `b0` – `b7` |
-| 🚗 Motion | `w<num>` | Select wheel kinematics model | `w0` Mecanum, `w1` 4-wheel omni, `w2` 3-wheel omni |
-| ⚙️ Config | `g<value>` | Set gear ratio | `g30` |
-| ⚙️ Config | `p<value>` | Set encoder PPR | `p13` |
-| ⚙️ Config | `a<mm>` | Set chassis dimension A | `a200` |
-| ⚙️ Config | `l<mm>` | Set chassis dimension B | `l150` |
-| 🎮 Control | `x<spd>` | X-axis velocity | Signed integer |
-| 🎮 Control | `y<spd>` | Y-axis velocity | Signed integer |
-| 🎮 Control | `z<spd>` | Rotation velocity | Signed integer |
-| 💃 Action | Dance command | Preset motion sequence | Parsed by [`dance_cmd.v`](verilog/rtl/motion/dance_cmd.v) |
-| 🦾 Arm | BLE / MV cmd | Grab, move, and place actions | Parsed by arm UART modules |
+| 🔧 System | `baud+<n>` | Set UART baud preset | `baud+0` – `baud+4` |
+| 🚗 Motion | `wheel+<n>` | Select wheel kinematics model | `wheel+0` Mecanum, `wheel+1` 4-wheel omni, `wheel+2` 3-wheel omni |
+| ⚙️ Config | `gr+<value>` | Set gear ratio | `gr+30` |
+| ⚙️ Config | `Ppr+<value>` | Set encoder PPR | `Ppr+13` |
+| ⚙️ Config | `alen+<mm>` | Set chassis dimension A | `alen+200` |
+| ⚙️ Config | `blen+<mm>` | Set chassis dimension B | `blen+150` |
+| 🎮 Control | `55 A5 sx x sy y sz z F0` | Chassis speed frame with sign bytes `sx/sy/sz` and magnitudes `x/y/z` | `sx/sy/sz`: `00` positive, `01` negative |
+| 💃 Action | `55 C5 mode F0` | Preset dance control frame | `mode=01` start, `mode=00` clear/reset |
+| 🦾 Arm BLE | `DD EE ... FF` | Arm action frame for observe / move / pack / put / catch | Parsed by [`uart_arm_ble.v`](verilog/rtl/comm/uart_arm_ble.v) |
+| 🦾 Arm MV | `AA BB ... CC` | Vision target frame carrying color, signed X/Y, and theta | Parsed by [`uart_arm_mv.v`](verilog/rtl/comm/uart_arm_mv.v) |
 
 ---
 
@@ -178,9 +179,9 @@ RoboMotion-FPGA/
 │   │   ├── math/                     📐 CORDIC, Multiplier, Divider
 │   │   ├── peripheral/               🌡️ Sensor, Display, Timer, Key Filter
 │   │   └── protocol/                 📋 FSM Protocol Parsers (fsm_gr, fsm_ppr, ...)
-│   ├── filelists/                    📋 Filelists (filelist.f, fpgafiles.vf)
-│   ├── tb/                           🧪 Testbenches
-│   └── sim/                          📊 Simulation
+│   ├── filelists/                    📋 Legacy filelists (currently Windows absolute paths)
+│   ├── tb/                           🧪 Testbench directory (currently empty)
+│   └── sim/                          📊 Simulation directory (currently empty)
 ├── constrain/                        📏 Pin Constraints
 │   ├── robot_top_constrain.xdc
 │   └── disp_top_constrain.xdc
@@ -243,9 +244,10 @@ robot_top
 | **1** | Create a new project in **Xilinx Vivado** |
 | **2** | Add all Verilog sources from [`verilog/rtl/`](verilog/rtl/) |
 | **3** | Add XDC constraints from [`constrain/`](constrain/) |
-| **4** | Set [`robot_top.v`](verilog/rtl/top/robot_top.v) as the **system top module** |
-| **5** | Run **Synthesis → Implementation → Generate Bitstream** |
-| **6** | Download the bitstream to your FPGA board and power on |
+| **4** | Regenerate or replace the bundled filelists if your toolflow cannot use the legacy Windows absolute paths in [`verilog/filelists/`](verilog/filelists/) |
+| **5** | Set [`robot_top.v`](verilog/rtl/top/robot_top.v) as the **system top module** |
+| **6** | Run **Synthesis → Implementation → Generate Bitstream** |
+| **7** | Download the bitstream to your FPGA board and power on |
 
 ---
 

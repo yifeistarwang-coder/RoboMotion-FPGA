@@ -1,12 +1,19 @@
+<a id="top"></a>
+
 <div align="center">
 
-# 🤖 RoboMotion-FPGA
+<h1>🤖 RoboMotion-FPGA</h1>
 
-**基于 FPGA 的全向移动机械臂控制系统**
+<p><strong>基于 FPGA 的全向移动机械臂控制系统</strong></p>
 
-![HDL](https://img.shields.io/badge/HDL-Verilog-1572B6?style=flat-square&logo=verilog&logoColor=white) ![FPGA](https://img.shields.io/badge/FPGA-Xilinx-E01F27?style=flat-square&logo=xilinx&logoColor=white) ![IDE](https://img.shields.io/badge/IDE-Vivado-029FCE?style=flat-square) ![License](https://img.shields.io/badge/License-Educational-success?style=flat-square) [![Modules](https://img.shields.io/badge/Verilog_模块-56-1572B6?style=flat-square)](verilog/) [![XDC](https://img.shields.io/badge/约束文件-2-red?style=flat-square)](constrain/)
+<p>
+  全向四轮底盘 · 六自由度舵机机械臂 · CORDIC 运动学<br/>
+  多路 UART 控制 · 传感器套件 · PID 电机驱动
+</p>
 
-[English](README.md) &nbsp;·&nbsp; [系统架构](#-系统架构) &nbsp;·&nbsp; [核心模块](#-核心模块) &nbsp;·&nbsp; [UART 协议](#-uart-协议) &nbsp;·&nbsp; [快速开始](#-快速开始)
+![HDL](https://img.shields.io/badge/HDL-Verilog-1572B6?style=flat-square&logo=verilog&logoColor=white) ![FPGA](https://img.shields.io/badge/FPGA-Xilinx-E01F27?style=flat-square&logo=xilinx&logoColor=white) ![IDE](https://img.shields.io/badge/IDE-Vivado-029FCE?style=flat-square&logo=xilinx&logoColor=white) ![许可](https://img.shields.io/badge/许可-教学科研-success?style=flat-square) [![Modules](https://img.shields.io/badge/Verilog_模块-56-1572B6?style=flat-square)](verilog/) [![XDC](https://img.shields.io/badge/约束文件-2-red?style=flat-square)](constrain/)
+
+[📖 English](README.md) · [🏗️ 系统架构](#-系统架构) · [🧱 核心模块](#-核心模块) · [📡 UART 协议](#-uart-协议) · [🚀 快速开始](#-快速开始)
 
 </div>
 
@@ -14,58 +21,123 @@
 
 ## 📖 项目概述
 
-> **RoboMotion-FPGA** 是一个面向 Xilinx FPGA 平台的完整 Verilog HDL 机器人控制系统。工程将全向四轮移动底盘、六路舵机机械臂子系统、传感器与显示外设、以及多路 UART 指令接口集成到统一的顶层硬件设计中——专为自主移动抓取应用而构建。
-
----
-
-## ✨ 项目亮点
+<div align="center">
 
 <table>
 <tr>
-<td width="33%" valign="top">
+<td width="70%">
 
-<h3 align="center">🚗<br/>移动<br/>底盘</h3>
-<p>4 路直流电机驱动，集成编码器反馈、PWM 输出，支持速度 PID 闭环控制。</p>
-
-</td>
-<td width="33%" valign="top">
-
-<h3 align="center">🧮<br/>运动学<br/>引擎</h3>
-<p>支持 <strong>麦克纳姆轮</strong>、<strong>全向四轮</strong>、<strong>全向三轮</strong> 三种运动模型，可通过 UART 实时切换。</p>
+> ⚡ **RoboMotion-FPGA** 是一个面向 Xilinx FPGA 平台的完整 Verilog HDL 机器人控制系统。工程将**全向四轮移动底盘**、**六路舵机机械臂子系统**、**传感器与显示外设**、以及**多路 UART 指令接口**集成到统一的顶层硬件设计中——专为自主移动抓取应用而构建。🎯
 
 </td>
-<td width="33%" valign="top">
+<td width="30%" align="center">
 
-<h3 align="center">🦾<br/>机械臂<br/>控制</h3>
-<p>6 路舵机 PWM 输出，基于 <strong>CORDIC 算法的逆运动学解算</strong>，用于机械臂定位与夹爪控制。</p>
-
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top">
-
-<h3 align="center">📡<br/>多协议<br/>UART</h3>
-<p>蓝牙控制、机器视觉输入、配置成功回传、FSM 指令解析——全部通过可配置的 UART 通道实现。</p>
-
-</td>
-<td width="33%" valign="top">
-
-<h3 align="center">🌡️<br/>传感器<br/>套件</h3>
-<p>DHT11 温湿度采集、基于 UART 的测距输入（×3）、按键输入、74HC595 数码管显示——环境感知与信息输出一体化。</p>
-
-</td>
-<td width="33%" valign="top">
-
-<h3 align="center">🔧<br/>开发者<br/>友好</h3>
-<p>模块化层级结构清晰，顶层集成简洁明了——易于理解、便于扩展。</p>
+<div align="center">
+  <p>🤖 &nbsp; 🏃💨 &nbsp; 📡 &nbsp; 🦾 &nbsp; 🚗 🚗 🚗 🚗 🚗 🚗</p>
+</div>
 
 </td>
 </tr>
 </table>
 
+</div>
+
+---
+
+## ✨ 项目亮点
+
+<div align="center">
+<h3>这个项目凭什么 <code>✨ 这么酷 ✨</code>？</h3>
+</div>
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+<h3 align="center">
+  🚗<br/>
+  移动底盘
+</h3>
+
+<p>4 路直流电机驱动，集成编码器反馈、PWM 输出，支持<strong>速度 PID 闭环控制</strong>。丝滑精准的运动表现！🏎️💨</p>
+
+</td>
+<td width="33%" valign="top">
+
+<h3 align="center">
+  🧮<br/>
+  运动学引擎
+</h3>
+
+<p>支持 <strong>麦克纳姆轮</strong> 🔄、<strong>全向四轮</strong> ➕、<strong>全向三轮</strong> 🔺 三种运动模型，可通过 UART 实时切换。随心所欲，想去哪就去哪！😎</p>
+
+</td>
+<td width="33%" valign="top">
+
+<h3 align="center">
+  🦾<br/>
+  机械臂控制
+</h3>
+
+<p>6 路舵机 PWM 输出，基于 <strong>CORDIC 算法的逆运动学解算</strong>，用于机械臂定位与夹爪控制。伸出去，抓住它！🎯✊</p>
+
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+<h3 align="center">
+  📡<br/>
+  多协议 UART
+</h3>
+
+<p>蓝牙控制 📱、机器视觉输入 👁️、配置成功回传 ✅、FSM 指令解析——全部通过可配置的 UART 通道实现。用你喜欢的方式跟机器人对话！💬</p>
+
+</td>
+<td width="33%" valign="top">
+
+<h3 align="center">
+  🌡️<br/>
+  传感器套件
+</h3>
+
+<p>DHT11 温湿度采集 🌤️、基于 UART 的测距输入（×3）📏、按键输入 🔘、74HC595 数码管显示 🔢。你的机器人拥有"感官"！👃</p>
+
+</td>
+<td width="33%" valign="top">
+
+<h3 align="center">
+  🔧<br/>
+  开发者友好
+</h3>
+
+<p>模块化层级结构清晰 🧩，顶层集成简洁明了——易于理解、便于扩展。克隆它，改造它，让它成为你的专属！🚀😝</p>
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+<div align="center">
+
+<p>
+  🚗 ────── 🧮 ────── 🦾 ────── 📡 ────── 🌡️ ────── 🔧<br/>
+  ✨ ────────────────── 🎉 ────────────────── ✨
+</p>
+
+</div>
+
 ---
 
 ## 🏗️ 系统架构
+
+<div align="center">
+<h3>📐 系统框图 🔍</h3>
+<i>点击展开查看细节 — 一切从 <code>robot_top</code> 开始！</i>
+</div>
+
+<br/>
 
 ```mermaid
 flowchart LR
@@ -75,30 +147,30 @@ flowchart LR
   classDef output fill:#fff7ed,stroke:#ea580c,color:#7c2d12;
   classDef feedback fill:#fefce8,stroke:#ca8a04,color:#713f12;
 
-  subgraph IN["外部接口"]
-    command_in["指令输入<br/>蓝牙 UART / MV UART / 急停"]
-    sensor_in["传感输入<br/>测距 UART / DHT11 / 按键"]
-    enc["电机反馈<br/>编码器 A/B x4"]
+  subgraph IN["🌐 外部接口"]
+    command_in["🎮 指令输入<br/>蓝牙 UART / MV UART / 急停"]
+    sensor_in["🌡️ 传感输入<br/>测距 UART / DHT11 / 按键"]
+    enc["🔄 电机反馈<br/>编码器 A/B ×4"]
   end
 
-  robot_top["robot_top<br/>系统集成顶层"]
+  robot_top["🧩 robot_top<br/>系统集成顶层"]
 
-  subgraph CHASSIS["motor_chip_top - 底盘控制"]
-    chassis_uart["uart_ctrl<br/>速度与参数解析"]
-    wheel_ctrl["wheel_ctrl<br/>运动学与电机目标"]
-    motor_driver["dc_motor_driver_top x4<br/>PID + 编码器 + PWM"]
+  subgraph CHASSIS["⚙️ motor_chip_top — 底盘控制"]
+    chassis_uart["📡 uart_ctrl<br/>速度与参数解析"]
+    wheel_ctrl["🔄 wheel_ctrl<br/>运动学与电机目标"]
+    motor_driver["🔌 dc_motor_driver_top ×4<br/>PID + 编码器 + PWM"]
   end
 
-  subgraph ARM["arm_top - 六路舵机机械臂控制"]
-    arm_uart["uart_arm_mv / uart_arm_ble<br/>目标点与动作解析"]
-    arm_motion["motion<br/>CORDIC 逆运动学"]
-    servo_pwm["steer_pwm x6<br/>舵机脉宽生成"]
+  subgraph ARM["🦾 arm_top — 六路舵机机械臂"]
+    arm_uart["📡 uart_arm_mv / uart_arm_ble<br/>目标点与动作解析"]
+    arm_motion["📐 motion<br/>CORDIC 逆运动学"]
+    servo_pwm["⚡ steer_pwm ×6<br/>舵机脉宽生成"]
   end
 
-  subgraph DISPLAY["disp_top - 传感与显示"]
-    sensing["distance x3 + dht11_ctrl<br/>传感器采样"]
-    display["hex_top + hc595_driver<br/>数码管显示"]
-    guard["distance_en / direction_en<br/>底盘辅助信号"]
+  subgraph DISPLAY["📟 disp_top — 传感与显示"]
+    sensing["📏 distance ×3 + dht11_ctrl<br/>传感器采样"]
+    display["🔢 hex_top + hc595_driver<br/>数码管显示"]
+    guard["🛡️ distance_en / direction_en<br/>底盘辅助信号"]
   end
 
   command_in --> robot_top
@@ -108,19 +180,19 @@ flowchart LR
   robot_top --> chassis_uart
   chassis_uart --> wheel_ctrl
   wheel_ctrl --> motor_driver
-  motor_driver --> motors["M1-M4<br/>H 桥 + PWM"]
-  enc -. 反馈 .-> motor_driver
-  chassis_uart --> uart_tx["uart_tx<br/>配置 ACK"]
+  motor_driver --> motors["🚗 M1–M4<br/>H 桥 + PWM"]
+  enc -. ↩ 反馈 .-> motor_driver
+  chassis_uart --> uart_tx["📤 uart_tx<br/>配置 ACK"]
 
   robot_top --> arm_uart
   arm_uart --> arm_motion
   arm_motion --> servo_pwm
-  servo_pwm --> servos["steera-steerf<br/>舵机 PWM"]
+  servo_pwm --> servos["🦾 steera–steerf<br/>舵机 PWM"]
 
   robot_top --> sensing
   sensing --> display
-  display --> panel["shcp / stcp / ds"]
-  sensing --> guard -. 安全反馈 .-> wheel_ctrl
+  display --> panel["📟 shcp / stcp / ds"]
+  sensing --> guard -. 🛡️ 安全反馈 .-> wheel_ctrl
 
   class command_in,sensor_in external;
   class robot_top top;
@@ -133,7 +205,11 @@ flowchart LR
 
 ## 🧱 核心模块
 
-| 子系统 | 顶层模块 | 关键文件 |
+<div align="center">
+<h3>📦 工具箱里有什么？🔧</h3>
+</div>
+
+| 🏷️ 子系统 | ⚡ 顶层模块 | 🔑 关键文件 |
 |:---|:---|:---|
 | 🧩 系统集成 | [`robot_top.v`](verilog/rtl/top/robot_top.v) | 连接底盘、机械臂、显示、传感器与 UART 通道 |
 | ⚙️ 底盘控制 | [`motor_chip_top.v`](verilog/rtl/top/motor_chip_top.v) | [`wheel_ctrl.v`](verilog/rtl/motion/wheel_ctrl.v)、[`dc_motor_driver_top.v`](verilog/rtl/top/dc_motor_driver_top.v)、[`uart_ctrl.v`](verilog/rtl/comm/uart_ctrl.v) |
@@ -147,81 +223,91 @@ flowchart LR
 
 ## 📡 UART 协议
 
-> 💡 **提示：** 配置指令成功后，UART 将返回 `Set Successful!`。
+<div align="center">
+<h3>💬 如何跟你的机器人对话 🤖</h3>
+</div>
+
+> 💡 **提示：** 配置指令成功后，UART 将返回 `Set Successful!`。🎉
 >
 > 当前工程同时使用 ASCII 关键字命令和固定二进制帧两种解析方式。
 
-| 类别 | 指令 | 功能 | 示例 / 范围 |
+| 🎛️ 类别 | ⌨️ 指令 | 📝 功能 | 📋 示例 / 范围 |
 |:---|:---|:---|:---|
 | 🔧 系统 | `baud+<n>` | 设置 UART 波特率预设 | `baud+0` – `baud+4` |
-| 🚗 运动 | `wheel+<n>` | 选择轮系运动模型 | `wheel+0` 麦克纳姆，`wheel+1` 全向四轮，`wheel+2` 全向三轮 |
+| 🚗 运动 | `wheel+<n>` | 选择轮系运动模型 | `wheel+0` 麦克纳姆 🔄，`wheel+1` 全向四轮 ➕，`wheel+2` 全向三轮 🔺 |
 | ⚙️ 参数 | `gr+<value>` | 设置减速比 | `gr+30` |
 | ⚙️ 参数 | `Ppr+<value>` | 设置编码器 PPR | `Ppr+13` |
-| ⚙️ 参数 | `alen+<mm>` | 设置底盘尺寸 A | `alen+200` |
-| ⚙️ 参数 | `blen+<mm>` | 设置底盘尺寸 B | `blen+150` |
-| 🎮 控制 | `55 A5 sx x sy y sz z F0` | 底盘速度控制帧，`sx/sy/sz` 为符号位，`x/y/z` 为幅值 | `sx/sy/sz`：`00` 正、`01` 负 |
-| 💃 动作 | `55 C5 mode F0` | 预设舞蹈控制帧 | `mode=01` 启动，`mode=00` 清零 / 复位 |
-| 🦾 机械臂 BLE | `DD EE ... FF` | 机械臂动作帧，控制观察 / 运动 / 收拢 / 放置 / 夹取 | 由 [`uart_arm_ble.v`](verilog/rtl/comm/uart_arm_ble.v) 解析 |
-| 🦾 机械臂 MV | `AA BB ... CC` | 视觉目标帧，携带颜色、带符号 X/Y 与 theta | 由 [`uart_arm_mv.v`](verilog/rtl/comm/uart_arm_mv.v) 解析 |
+| ⚙️ 参数 | `alen+<mm>` | 设置底盘尺寸 A 📏 | `alen+200` |
+| ⚙️ 参数 | `blen+<mm>` | 设置底盘尺寸 B 📏 | `blen+150` |
+| 🎮 控制 | `55 A5 sx x sy y sz z F0` | 底盘速度控制帧，`sx/sy/sz` 为符号位，`x/y/z` 为幅值 🏎️ | `sx/sy/sz`：`00` 正 ✅、`01` 负 ❌ |
+| 💃 动作 | `55 C5 mode F0` | 预设舞蹈控制帧 🕺 | `mode=01` 启动 ▶️，`mode=00` 清零 / 复位 ⏹️ |
+| 🦾 机械臂 BLE | `DD EE ... FF` | 机械臂动作帧，控制观察 👀 / 运动 🎯 / 收拢 📦 / 放置 🫳 / 夹取 ✊ | 由 [`uart_arm_ble.v`](verilog/rtl/comm/uart_arm_ble.v) 解析 |
+| 🦾 机械臂 MV | `AA BB ... CC` | 视觉目标帧，携带颜色 🎨、带符号 X/Y 📍 与 theta 🧭 | 由 [`uart_arm_mv.v`](verilog/rtl/comm/uart_arm_mv.v) 解析 |
 
 ---
 
-## 📁 工程结构
+## 📦 工程结构
+
+<div align="center">
+<h3>🗂️ 文件树 — 每个模块的家 🏡</h3>
+</div>
 
 ```text
-RoboMotion-FPGA/
-├── verilog/                          📦 56 个硬件源文件
-│   ├── rtl/                          🔧 RTL 设计源码
-│   │   ├── top/                      🧩 系统顶层（robot_top、arm_top、motor_chip_top ……）
-│   │   ├── comm/                     📨 UART 通信（uart_*、fsm_baud）
-│   │   ├── motion/                   🔄 运动学与运动控制
-│   │   ├── motor/                    🔌 电机驱动、PID、编码器、PWM
-│   │   ├── math/                     📐 CORDIC、乘法器、除法器
-│   │   ├── peripheral/               🌡️ 传感器、显示、定时器、按键滤波
-│   │   └── protocol/                 📋 FSM 协议解析（fsm_gr、fsm_ppr ……）
-│   ├── filelists/                    📋 历史文件列表（当前为 Windows 绝对路径）
-│   ├── tb/                           🧪 测试平台目录（当前为空）
-│   └── sim/                          📊 仿真目录（当前为空）
-├── constrain/                        📏 管脚约束
-│   ├── robot_top_constrain.xdc
-│   └── disp_top_constrain.xdc
-└── README.md / README_CN.md          📖 说明文档
+📦 RoboMotion-FPGA/
+├── 📂 verilog/                       📦 56 个硬件源文件
+│   ├── 📂 rtl/                       🔧 RTL 设计源码
+│   │   ├── 📂 top/                   🧩 系统顶层（robot_top、arm_top、motor_chip_top ……）
+│   │   ├── 📂 comm/                  📨 UART 通信（uart_*、fsm_baud）
+│   │   ├── 📂 motion/                🔄 运动学与运动控制
+│   │   ├── 📂 motor/                 🔌 电机驱动、PID、编码器、PWM
+│   │   ├── 📂 math/                  📐 CORDIC、乘法器、除法器
+│   │   ├── 📂 peripheral/            🌡️ 传感器、显示、定时器、按键滤波
+│   │   └── 📂 protocol/              📋 FSM 协议解析（fsm_gr、fsm_ppr ……）
+│   ├── 📂 filelists/                 📋 历史文件列表（当前为 Windows 绝对路径）
+│   ├── 📂 tb/                        🚧 测试平台目录（当前为空）
+│   └── 📂 sim/                       🚧 仿真目录（当前为空）
+├── 📂 constrain/                     📏 管脚约束
+│   ├── 📄 robot_top_constrain.xdc
+│   └── 📄 disp_top_constrain.xdc
+└── 📄 README.md / README_CN.md       📖 说明文档
 ```
 
 <details>
-<summary><b>🔍 展开完整硬件拓扑</b></summary>
+<summary><b>🔍 展开完整硬件拓扑 🏗️</b></summary>
+
+<br/>
 
 ```text
-robot_top
-├── disp_top
-│   ├── hex_top / hc595_driver
-│   ├── dht11_ctrl
-│   ├── distance ×3
-│   ├── uart_ble
-│   └── switch_key_filter
-├── motor_chip_top
-│   ├── wheel_ctrl
-│   │   ├── Mcknum_wheel_calculate
-│   │   ├── all_direction_wheel_four_calculate
-│   │   ├── all_direction_wheel_three_calculate
-│   │   └── dc_motor_driver_top ×4
-│   │       ├── encoder / encoder_AB_detect
-│   │       ├── controller / controller_PID / controller_Speed_loop
-│   │       ├── pwm_generate
-│   │       └── dc_motor_driver
-│   └── uart_ctrl
-│       ├── fsm_gr / fsm_ppr / fsm_wheel / fsm_a_len / fsm_b_len / fsm_baud
-│       ├── uart_cmd / dance_cmd
-│       ├── multiplier / divider
-│       └── uart_data_tx
-└── arm_top
-    ├── motion
-    │   ├── cordic_sincos
-    │   ├── cordic_arctan
-    │   └── cordic_arccos
-    ├── steer_pwm ×6
-    ├── uart_arm_mv
-    └── uart_arm_ble
+🧩 robot_top
+├── 📟 disp_top
+│   ├── 🔢 hex_top / hc595_driver
+│   ├── 🌡️ dht11_ctrl
+│   ├── 📏 distance ×3
+│   ├── 📡 uart_ble
+│   └── 🔘 switch_key_filter
+├── ⚙️ motor_chip_top
+│   ├── 🔄 wheel_ctrl
+│   │   ├── 🛞 Mcknum_wheel_calculate
+│   │   ├── ➕ all_direction_wheel_four_calculate
+│   │   ├── 🔺 all_direction_wheel_three_calculate
+│   │   └── 🔌 dc_motor_driver_top ×4
+│   │       ├── 🧭 encoder / encoder_AB_detect
+│   │       ├── 🧠 controller / controller_PID / controller_Speed_loop
+│   │       ├── ⚡ pwm_generate
+│   │       └── 🔩 dc_motor_driver
+│   └── 📡 uart_ctrl
+│       ├── 📋 fsm_gr / fsm_ppr / fsm_wheel / fsm_a_len / fsm_b_len / fsm_baud
+│       ├── 🎮 uart_cmd / dance_cmd
+│       ├── 🧮 multiplier / divider
+│       └── 📤 uart_data_tx
+└── 🦾 arm_top
+    ├── 📐 motion
+    │   ├── 🌀 cordic_sincos
+    │   ├── 🧭 cordic_arctan
+    │   └── 📏 cordic_arccos
+    ├── ⚡ steer_pwm ×6
+    ├── 👁️ uart_arm_mv
+    └── 📶 uart_arm_ble
 ```
 
 </details>
@@ -230,49 +316,100 @@ robot_top
 
 ## 🛠️ 开发环境
 
-| 工具 | 用途 |
+| 🖥️ 工具 | 🎯 用途 |
 |:---|:---|
-| ![Vivado](https://img.shields.io/badge/Xilinx_Vivado-综合与实现-029FCE?style=flat-square) | 综合、实现、时序分析与比特流生成 |
-| ![FPGA](https://img.shields.io/badge/Xilinx_FPGA-目标器件-E01F27?style=flat-square) | 目标硬件平台，具体管脚分配见 `.xdc` 约束文件 |
+| ![Vivado](https://img.shields.io/badge/🛠️_Xilinx_Vivado-综合与实现-029FCE?style=for-the-badge&logo=xilinx&logoColor=white) | 综合、实现、时序分析与比特流生成 |
+| ![FPGA](https://img.shields.io/badge/🖥️_Xilinx_FPGA-目标器件-E01F27?style=for-the-badge&logo=xilinx&logoColor=white) | 目标硬件平台，具体管脚分配见 `.xdc` 约束文件 |
 
 ---
 
 ## 🚀 快速开始
 
-| 步骤 | 操作 |
-|:---:|:---|
-| **1** | 在 **Xilinx Vivado** 中创建新工程 |
-| **2** | 添加 [`verilog/rtl/`](verilog/rtl/) 目录下的全部 Verilog 源文件 |
-| **3** | 添加 [`constrain/`](constrain/) 目录下的 XDC 约束文件 |
-| **4** | 如果当前工具流无法直接使用 [`verilog/filelists/`](verilog/filelists/) 中的 Windows 绝对路径文件列表，请先重新生成或替换 |
-| **5** | 将 [`robot_top.v`](verilog/rtl/top/robot_top.v) 设置为 **系统顶层模块** |
-| **6** | 依次运行 **综合 → 实现 → 生成 Bitstream** |
-| **7** | 将 bitstream 下载到 FPGA 开发板并上电运行 |
+<div align="center">
+<h3>⚡ 七步搞定！🏁</h3>
+</div>
+
+1. 📁 在 **Xilinx Vivado** 中创建新工程
+2. 📥 添加 [`verilog/rtl/`](verilog/rtl/) 目录下的全部 Verilog 源文件
+3. 📌 添加 [`constrain/`](constrain/) 目录下的 XDC 约束文件
+4. 🔄 如果当前工具流无法直接使用 [`verilog/filelists/`](verilog/filelists/) 中的 Windows 绝对路径文件列表，请先重新生成或替换
+5. 🎯 将 [`robot_top.v`](verilog/rtl/top/robot_top.v) 设置为 **系统顶层模块**
+6. ⚙️ 依次运行 **综合 → 实现 → 生成 Bitstream**
+7. 🔌 将 bitstream 下载到 FPGA 开发板并上电运行 ⚡
+
+<br/>
+
+<div align="center">
+
+<p>📁 ──→ 📥 ──→ 📌 ──→ 🔄 ──→ 🎯 ──→ ⚙️ ──→ 🔌 ✨ 完成！✨</p>
+
+</div>
 
 ---
 
 ## 📊 项目统计
 
-| 指标 | 数量 |
+<div align="center">
+
+| 📈 指标 | 🔢 数量 | 🏁 状态 |
+|:---|:---:|:---:|
+| 🧩 Verilog 模块 | **56** | 🏆 |
+| 📏 XDC 约束文件 | **2** | ✅ |
+| 📐 CORDIC 运算器 | **4** | ✅ |
+| 🔄 运动学模型 | **3** | ✅ |
+| 📡 UART 接口 | **4+** | ✅ |
+| 🔌 电机通道 | **4** | ✅ |
+| ⚡ 舵机通道 | **6** | ✅ |
+
+<br/>
+
+<p>
+  🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩 🧩<br/>
+  📡 📡 📡 📡 &nbsp; 🔌 🔌 🔌 🔌 &nbsp; ⚡ ⚡ ⚡ ⚡ ⚡ ⚡ &nbsp; 🔄 🔄 🔄 &nbsp; 📐 📐 📐 📐
+</p>
+
+</div>
+
+---
+
+## 🙏 致谢
+
+<div align="center">
+
+| 🤝 特别感谢…… | 💝 心意 |
 |:---|:---:|
-| Verilog 模块 | **56** |
-| XDC 约束文件 | **2** |
-| CORDIC 运算器 | **4** |
-| 运动学模型 | **3** |
-| UART 接口 | **4+** |
-| 电机通道 | **4** |
-| 舵机通道 | **6** |
+| Xilinx / AMD FPGA 生态系统 | 🎯 |
+| 开源 HDL 社区 | 🌍 |
+| 所有贡献者和用户 | 🫵😝 |
+
+<br/>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png">
+  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" />
+</picture>
+
+</div>
 
 ---
 
 ## 📜 许可
 
-本项目仅供 **教育与研究** 使用。
-
----
-
 <div align="center">
 
-[⬆ 回到顶部](#-robomotion-fpga)
+<table>
+<tr>
+<td>
+
+本项目仅供 **教育与研究** 使用。📚🔬
+
+</td>
+<td>
+
+<p>📖 ──→ 🧠 ──→ 💡 ──→ 🤖</p>
+
+</td>
+</tr>
+</table>
 
 </div>
